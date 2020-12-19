@@ -38,95 +38,97 @@ header.banner {
   margin-top: 70px;
   padding: 1em;
   overflow: auto; }
-  .container .favorites-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 2.5em; }
-    .container .favorites-header .title {
-      display: flex;
-      font-size: 14px;
-      height: 100%;
-      flex-direction: column;
-      justify-content: space-between; }
-      .container .favorites-header .title-head {
-        color: #000;
-        font-weight: 500;
-        font-family: 'Roboto', sans-serif; }
-      .container .favorites-header .title-subtitle {
-        color: #ababab; }
-    .container .favorites-header .cart {
-      cursor: pointer;
+  .container .favorites {
+    margin-bottom: 1em; }
+    .container .favorites-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      position: relative; }
-      .container .favorites-header .cart #bag-count {
-        font-size: 12px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); }
-  .container .favorites-container {
-    padding: 1em 0em;
-    display: flex;
-    overflow-x: auto;
-    border-bottom: 1px solid #ababab; }
-    .container .favorites-container .item:not(:last-of-type) {
-      padding-right: 1em; }
-    .container .favorites-container .item-pic {
-      margin: 0;
-      cursor: pointer; }
-      .container .favorites-container .item-pic img {
-        max-width: 300px; }
-    .container .favorites-container .item-footer {
-      padding-top: 0.5em;
-      display: flex;
-      justify-content: space-between; }
-      .container .favorites-container .item-footer .details {
+      justify-content: space-between;
+      height: 2.5em; }
+      .container .favorites-header .title {
         display: flex;
+        height: 100%;
         flex-direction: column;
-        max-width: 200px;
-        overflow-wrap: break-word;
-        font-weight: 500; }
-        .container .favorites-container .item-footer .details-name {
-          font-size: 14px; }
-        .container .favorites-container .item-footer .details-price {
-          font-size: 1em;
-          line-height: 1.5em; }
-      .container .favorites-container .item-footer .reorder {
-        border: none;
-        max-height: 30px;
-        outline: none;
-        border-radius: 5px;
-        min-width: 100px;
-        text-align: center;
-        background: #41c379;
-        color: #fff;
-        font-size: 12px;
-        cursor: pointer; }
-        .container .favorites-container .item-footer .reorder:hover {
-          filter: brightness(110%);
-          transition: filter 0.2s ease; }
-      .container .favorites-container .item-footer .update-item {
-        border-radius: 5px;
-        min-width: 100px;
-        text-align: center;
-        background: #41c379;
-        color: #fff;
-        font-size: 12px;
-        max-height: 30px;
-        padding: 0 0.5em;
+        justify-content: space-between; }
+        .container .favorites-header .title-head {
+          color: #000;
+          font-size: 14px;
+          font-weight: 500; }
+        .container .favorites-header .title-subtitle {
+          font-size: 13px;
+          color: #ababab; }
+      .container .favorites-header .cart {
+        cursor: pointer;
         display: flex;
         align-items: center;
+        justify-content: center;
+        position: relative; }
+        .container .favorites-header .cart #bag-count {
+          font-size: 12px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%); }
+    .container .favorites-container {
+      padding: 1em 0em;
+      display: flex;
+      overflow-x: auto;
+      border-bottom: 1px solid #ababab; }
+      .container .favorites-container .item:not(:last-of-type) {
+        margin-right: 1em; }
+      .container .favorites-container .item-pic {
+        margin: 0;
+        cursor: pointer; }
+        .container .favorites-container .item-pic img {
+          max-width: 300px; }
+      .container .favorites-container .item-footer {
+        padding-top: 0.5em;
+        display: flex;
         justify-content: space-between; }
-        .container .favorites-container .item-footer .update-item .decrement, .container .favorites-container .item-footer .update-item .increment {
-          cursor: pointer;
-          display: flex; }
-        .container .favorites-container .item-footer .update-item .item-count {
-          font-size: 12px; }
-        .container .favorites-container .item-footer .update-item.hidden {
-          display: none; }
+        .container .favorites-container .item-footer .details {
+          display: flex;
+          flex-direction: column;
+          max-width: 200px;
+          overflow-wrap: break-word;
+          font-weight: 500; }
+          .container .favorites-container .item-footer .details-name {
+            font-size: 14px; }
+          .container .favorites-container .item-footer .details-price {
+            font-size: 1em;
+            line-height: 1.5em; }
+        .container .favorites-container .item-footer .reorder {
+          border: none;
+          max-height: 30px;
+          outline: none;
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: #41c379;
+          color: #fff;
+          font-size: 12px;
+          cursor: pointer; }
+          .container .favorites-container .item-footer .reorder:hover {
+            filter: brightness(110%);
+            transition: filter 0.2s ease; }
+        .container .favorites-container .item-footer .update-item {
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: #41c379;
+          color: #fff;
+          font-size: 12px;
+          max-height: 30px;
+          padding: 0 0.5em;
+          display: flex;
+          align-items: center;
+          justify-content: space-between; }
+          .container .favorites-container .item-footer .update-item .decrement, .container .favorites-container .item-footer .update-item .increment {
+            cursor: pointer;
+            display: flex; }
+          .container .favorites-container .item-footer .update-item .item-count {
+            font-size: 12px; }
+          .container .favorites-container .item-footer .update-item.hidden {
+            display: none; }
   .container .search-container {
     padding: 1em 0;
     position: relative; }
@@ -150,7 +152,134 @@ header.banner {
       outline: none;
       font-family: 'Roboto';
       font-weight: 400;
-      font-size: 14px; }
+      font-size: 13px; }
+  .container .recipes-container .categories-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+    .container .recipes-container .categories-header-title {
+      font-size: 14px;
+      color: #000;
+      font-weight: 500; }
+    .container .recipes-container .categories-header-filter {
+      display: flex;
+      align-items: center; }
+      .container .recipes-container .categories-header-filter-text {
+        font-size: 13px;
+        color: #ababab; }
+      .container .recipes-container .categories-header-filter-icon {
+        padding-left: 1em;
+        display: flex;
+        cursor: pointer; }
+  .container .recipes-container .categories {
+    display: flex;
+    padding: 1em 0;
+    overflow-x: auto; }
+    .container .recipes-container .categories-item {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      min-width: 140px;
+      font-size: 14px;
+      color: #393939;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: background 0.2s ease; }
+      .container .recipes-container .categories-item:hover {
+        transition: background 0.2s ease;
+        background: rgba(65, 195, 121, 0.1); }
+      .container .recipes-container .categories-item.active {
+        border-bottom: 2px solid #41c379; }
+      .container .recipes-container .categories-item:not(:last-of-type) {
+        margin-right: 1em; }
+      .container .recipes-container .categories-item-icon {
+        display: flex;
+        margin: 0 1em 0 0; }
+        .container .recipes-container .categories-item-icon img {
+          width: 30px; }
+      .container .recipes-container .categories-item-name {
+        font-size: 13px;
+        text-transform: uppercase; }
+  .container .recipes-container .food-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 0; }
+    .container .recipes-container .food-items-container .food-item {
+      width: calc(25% - 1em);
+      background: #fff;
+      border-radius: 5px;
+      margin: 0 1em 1em 0;
+      box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2); }
+      .container .recipes-container .food-items-container .food-item-pic {
+        margin: 0;
+        cursor: pointer; }
+        .container .recipes-container .food-items-container .food-item-pic img {
+          width: 100%; }
+      .container .recipes-container .food-items-container .food-item-footer {
+        padding: 0.5em 1em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; }
+        .container .recipes-container .food-items-container .food-item-footer .details {
+          display: flex;
+          flex-direction: column;
+          padding-right: 5px;
+          font-weight: 500; }
+          .container .recipes-container .food-items-container .food-item-footer .details-name {
+            font-size: 14px; }
+          .container .recipes-container .food-items-container .food-item-footer .details-price {
+            font-size: 1em;
+            padding-top: 5px; }
+        .container .recipes-container .food-items-container .food-item-footer .add-cart {
+          border: none;
+          height: 30px;
+          outline: none;
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: #41c379;
+          color: #fff;
+          font-size: 12px;
+          cursor: pointer; }
+          .container .recipes-container .food-items-container .food-item-footer .add-cart:hover {
+            filter: brightness(110%);
+            transition: filter 0.2s ease; }
+        .container .recipes-container .food-items-container .food-item-footer .update-item {
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: #41c379;
+          color: #fff;
+          font-size: 12px;
+          height: 30px;
+          padding: 0 0.5em;
+          display: flex;
+          align-items: center;
+          justify-content: space-between; }
+          .container .recipes-container .food-items-container .food-item-footer .update-item .decrement, .container .recipes-container .food-items-container .food-item-footer .update-item .increment {
+            cursor: pointer;
+            display: flex; }
+          .container .recipes-container .food-items-container .food-item-footer .update-item .item-count {
+            font-size: 12px; }
+          .container .recipes-container .food-items-container .food-item-footer .update-item.hidden {
+            display: none; }
+
+@media screen and (max-width: 1366px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: calc(33.33% - 1em); } }
+
+@media screen and (max-width: 1024px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: calc(50% - 1em); } }
+
+@media screen and (max-width: 650px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: 100%;
+    margin: 0 0 1em 0; }
+    .container .recipes-container .food-items-container .food-item:last-of-type {
+      margin: 0; } }
 
 ::-webkit-scrollbar {
   width: 0.45em;

@@ -69,21 +69,22 @@ header.banner {
   padding: 1em;
   overflow: auto;
   .favorites {
+    margin-bottom: 1em;
     &-header {
       @include flex-space-between();
       height: 2.5em;
       .title {
         display: flex;
-        font-size: 14px;
         height: 100%;
         flex-direction: column;
         justify-content: space-between;
         &-head {
           color: #000;
+          font-size: 14px;
           font-weight: 500;
-          font-family: 'Roboto', sans-serif;
         }
         &-subtitle {
+          font-size: 13px;
           color: $secondary;
         }
       }
@@ -102,9 +103,10 @@ header.banner {
       display: flex;
       overflow-x: auto;
       border-bottom: 1px solid $secondary;
+
       .item {
         &:not(:last-of-type) {
-          padding-right: 1em;
+          margin-right: 1em;
         }
         &-pic {
           margin: 0;
@@ -172,6 +174,7 @@ header.banner {
       }
     }
   }
+
   .search-container {
     padding: 1em 0;
     position: relative;
@@ -197,34 +200,174 @@ header.banner {
       outline: none;
       font-family: 'Roboto';
       font-weight: 400;
-      font-size: 14px;
+      font-size: 13px;
+    }
+  }
+
+  .recipes-container {
+    .categories-header {
+      @include flex-space-between();
+      &-title {
+        font-size: 14px;
+        color: #000;
+        font-weight: 500;
+      }
+      &-filter {
+        display: flex;
+        align-items: center;
+        &-text {
+          font-size: 13px;
+          color: $secondary;
+        }
+        &-icon {
+          padding-left: 1em;
+          display: flex;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .categories {
+      display: flex;
+      padding: 1em 0;
+      overflow-x: auto;
+      &-item {
+        background: #fff;
+        @include flex-center();
+        height: 50px;
+        min-width: 140px;
+        font-size: 14px;
+        color: #393939;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: background 0.2s ease;
+        &:hover {
+          transition: background 0.2s ease;
+          background: rgba(65,195,121, 0.1);
+        }
+        &.active {
+          border-bottom: 2px solid $bg-primary;
+        }
+        &:not(:last-of-type) {
+          margin-right: 1em;
+        }
+        &-icon {
+          display: flex;
+          margin: 0 1em 0 0;
+          img {
+            width: 30px;
+          }
+        }
+        &-name {
+          font-size: 13px;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .food-items-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 1em 0;
+      .food-item {
+        width: calc(25% - 1em);
+        background: #fff;
+        border-radius: 5px;
+        margin: 0 1em 1em 0;
+        box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.2);
+        &-pic {
+          margin: 0;
+          cursor: pointer;
+          img {
+            width: 100%;
+          }
+        }
+        &-footer {
+          padding: 0.5em 1em;
+          @include flex-space-between();
+          .details {
+            display: flex;
+            flex-direction: column;
+            padding-right: 5px;
+            font-weight: 500;
+            &-name {
+              font-size: 14px;
+            }
+            &-price {
+              font-size: 1em;
+              padding-top: 5px;
+            }
+          }
+          .add-cart {
+            border: none;
+            height: 30px;
+            outline: none;
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+            background: $bg-primary;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            &:hover {
+              filter: brightness(110%);
+              transition: filter 0.2s ease;
+            }
+          }
+          .update-item {
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+            background: $bg-primary;
+            color: #fff;
+            font-size: 12px;
+            height: 30px;
+            padding: 0 0.5em;
+            @include flex-space-between();
+            .decrement, .increment {
+              cursor: pointer;
+              display: flex;
+            }
+            .item-count {
+              font-size: 12px;
+            }
+            &.hidden {
+              display: none;
+            }
+          }
+        }
+      }
     }
   }
 }
 
-// @media screen and (max-width: 1366px) {
-//   .container .favorites-container .item {
-//     width: 33.33%;
-//     // &:nth-of-type(even) {
-//     //   padding-left: 0.5em;
-//     // }
-//   }
-// }
+@media screen and (max-width: 1366px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: calc(33.33% - 1em);
+    // &:nth-of-type(even) {
+    //   padding-left: 0.5em;
+    // }
+  }
+}
 
-// @media screen and (max-width: 1024px) {
-//   .container .favorites-container .item {
-//     width: 50%;
-//     // &:nth-of-type(even) {
-//     //   padding-right: 0;
-//     // }
-//   }
-// }
+@media screen and (max-width: 1024px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: calc(50% - 1em);
+    // &:nth-of-type(even) {
+    //   padding-right: 0;
+    // }
+  }
+}
 
-// @media screen and (max-width: 650px) {
-//   .container .favorites-container .item {
-//     width: 100%;
-//   }
-// }
+@media screen and (max-width: 650px) {
+  .container .recipes-container .food-items-container .food-item {
+    width: 100%;
+    margin: 0 0 1em 0;
+    &:last-of-type {
+      margin: 0;
+    }
+  }
+}
 
 // custom styles for the scroll bar
 ::-webkit-scrollbar {

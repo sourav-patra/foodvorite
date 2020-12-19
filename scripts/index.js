@@ -6,12 +6,15 @@ const bagCountElement = document.getElementById('bag-count');
 const searchInputElement = document.getElementById('search-text');
 const searchIconElement = document.getElementById('search');
 const removeIconElement = document.getElementById('remove');
+
+const categoriesElement = document.getElementById('categories');
 const navigateElement = document.getElementById('navigate-back');
 
 let categories = [];
 let recipes = [];
 let favorites = [];
 let cartItemsCount = 0;
+let activeCategoryIndex = -1;
 
 /**
  * Get foodfavorites data
@@ -22,8 +25,8 @@ const getData = async () => {
     const data = await response.json();
     categories = data.categories || [];
     recipes = data.recipes || [];
-    console.log(categories, recipes);
     getFavorites();
+    getCategories();
   } catch (error) {
     console.log(error);
   }
@@ -39,7 +42,7 @@ const setAttributesForGivenElement = (element, attributesObj) => {
   }
 }
 
-const renderFavoriteFoodItems = (favoriteItem) => {
+const renderFavoriteFoodItem = (favoriteItem) => {
   // Main container item element
   const element = favoriteItemTemplate.content.cloneNode(true);
   const imageElement = element.querySelector('.item .item-pic img');
@@ -73,8 +76,8 @@ const renderFavoriteFoodItems = (favoriteItem) => {
       reorderBtn.hidden = false;
     } else {
       favoriteItem.itemCount -= 1;
+      foodItemCountElement.textContent = favoriteItem.itemCount;
     }
-    foodItemCountElement.textContent = favoriteItem.itemCount;
     decrementGlobalCartCount();
   });
 
@@ -110,10 +113,63 @@ function decrementGlobalCartCount() {
 
 const getFavorites = () => {
   favorites = recipes.filter(recipe => recipe.isFavourite);
-  console.log(favorites);
   favorites.forEach(favoriteItem => {
-    const elementItem = renderFavoriteFoodItems(favoriteItem);
+    const elementItem = renderFavoriteFoodItem(favoriteItem);
     favoritesContainer.appendChild(elementItem);
+  });
+}
+
+const renderCategoryItem = (categoryItem, index) => {
+  // Main category card
+  const elementItem = document.createElement('div');
+  elementItem.classList.add('categories-item');
+  // Image Wrapper
+  const figureElement = document.createElement('figure');
+  figureElement.classList.add('categories-item-icon');
+  // Image element
+  const imageElement = document.createElement('img');
+  setAttributesForGivenElement(imageElement, {
+    src: categoryItem.image,
+    alt: categoryItem.name,
+    title: categoryItem.name
+  })
+  figureElement.appendChild(imageElement);
+  // Name of the category
+  const imageSpanElement = document.createElement('span');
+  imageSpanElement.classList.add('categories-item-name');
+  imageSpanElement.textContent = categoryItem.name;
+  // Add the children to the parent item element
+  elementItem.appendChild(figureElement);
+  elementItem.appendChild(imageSpanElement);
+
+  elementItem.addEventListener('click', () => {
+    // If there's no previously active index, then set new
+    if (activeCategoryIndex === -1) {
+      activeCategoryIndex = index;
+      elementItem.classList.add('active');
+      // if the same item was selected as active earlier
+      // then deselect it
+    } else if (activeCategoryIndex === index) {
+      activeCategoryIndex = -1;
+      elementItem.classList.remove('active');
+    } else {
+      // if some other category was active
+      // then deselect it
+      const previouslyActiveCategoryElement = categoriesElement.children[activeCategoryIndex];
+      previouslyActiveCategoryElement.classList.remove('active');
+      // and set this one as active
+      activeCategoryIndex = index;
+      elementItem.classList.add('active');
+    }
+    // redraw items after this
+  })
+  return elementItem;
+}
+
+const getCategories = () => {
+  categories.forEach((categoryItem, index) => {
+    const elementItem = renderCategoryItem(categoryItem, index);
+    categoriesElement.appendChild(elementItem);
   });
 }
 
