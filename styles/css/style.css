@@ -1,0 +1,166 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: whitesmoke; }
+
+header.banner {
+  position: fixed;
+  z-index: 10;
+  width: 100vw;
+  height: 70px;
+  top: 0;
+  background: #41c379;
+  color: #fff;
+  display: flex;
+  align-items: center; }
+  header.banner h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 500; }
+  header.banner .navigate-back {
+    padding-left: 1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center; }
+    header.banner .navigate-back.hidden {
+      display: none; }
+
+.container {
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  padding: 1em;
+  overflow: auto; }
+  .container .favorites-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.5em; }
+    .container .favorites-header .title {
+      display: flex;
+      font-size: 14px;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between; }
+      .container .favorites-header .title-head {
+        color: #000;
+        font-weight: 500;
+        font-family: 'Roboto', sans-serif; }
+      .container .favorites-header .title-subtitle {
+        color: #ababab; }
+    .container .favorites-header .cart {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative; }
+      .container .favorites-header .cart #bag-count {
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
+  .container .favorites-container {
+    padding: 1em 0em;
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid #ababab; }
+    .container .favorites-container .item:not(:last-of-type) {
+      padding-right: 1em; }
+    .container .favorites-container .item-pic {
+      margin: 0;
+      cursor: pointer; }
+      .container .favorites-container .item-pic img {
+        max-width: 300px; }
+    .container .favorites-container .item-footer {
+      padding-top: 0.5em;
+      display: flex;
+      justify-content: space-between; }
+      .container .favorites-container .item-footer .details {
+        display: flex;
+        flex-direction: column;
+        max-width: 200px;
+        overflow-wrap: break-word;
+        font-weight: 500; }
+        .container .favorites-container .item-footer .details-name {
+          font-size: 14px; }
+        .container .favorites-container .item-footer .details-price {
+          font-size: 1em;
+          line-height: 1.5em; }
+      .container .favorites-container .item-footer .reorder {
+        border: none;
+        max-height: 30px;
+        outline: none;
+        border-radius: 5px;
+        min-width: 100px;
+        text-align: center;
+        background: #41c379;
+        color: #fff;
+        font-size: 12px;
+        cursor: pointer; }
+        .container .favorites-container .item-footer .reorder:hover {
+          filter: brightness(110%);
+          transition: filter 0.2s ease; }
+      .container .favorites-container .item-footer .update-item {
+        border-radius: 5px;
+        min-width: 100px;
+        text-align: center;
+        background: #41c379;
+        color: #fff;
+        font-size: 12px;
+        max-height: 30px;
+        padding: 0 0.5em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; }
+        .container .favorites-container .item-footer .update-item .decrement, .container .favorites-container .item-footer .update-item .increment {
+          cursor: pointer;
+          display: flex; }
+        .container .favorites-container .item-footer .update-item .item-count {
+          font-size: 12px; }
+        .container .favorites-container .item-footer .update-item.hidden {
+          display: none; }
+  .container .search-container {
+    padding: 1em 0;
+    position: relative; }
+    .container .search-container .search-icon {
+      position: absolute;
+      left: 0;
+      top: 1em;
+      cursor: pointer; }
+    .container .search-container .remove-icon {
+      position: absolute;
+      right: 0;
+      top: 1em;
+      cursor: pointer; }
+    .container .search-container #search-text {
+      border: none;
+      border-bottom: 1px solid #ababab;
+      background: transparent;
+      width: 100%;
+      padding: 0 2em 0 2.5em;
+      line-height: 2em;
+      outline: none;
+      font-family: 'Roboto';
+      font-weight: 400;
+      font-size: 14px; }
+
+::-webkit-scrollbar {
+  width: 0.45em;
+  height: 0.45em; }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1em;
+  background: #c9c9c9; }
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+  width: 0.45em; }

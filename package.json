@@ -1,0 +1,39 @@
+{
+  "name": "foodvorite",
+  "version": "1.0.0",
+  "description": "personal favorite dish tracker",
+  "main": "index.js",
+  "scripts": {
+    "sass-compile": "node-sass styles/scss -o styles/css",
+    "sass-watch": "node-sass -w styles/scss -o styles/css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourav-patra/foodvorite.git"
+  },
+  "keywords": [
+    "favorite",
+    "food",
+    "favorite",
+    "dish",
+    "food",
+    "tracker",
+    "dish",
+    "tracker",
+    "food",
+    "order"
+  ],
+  "author": "Sourav Patra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sourav-patra/foodvorite/issues"
+  },
+  "homepage": "https://github.com/sourav-patra/foodvorite#readme",
+  "dependencies": {
+    "node-sass": "^5.0.0"
+  },
+  "devDependencies": {
+    "node-sass": "^5.0.0"
+  }
+}
