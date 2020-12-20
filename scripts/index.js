@@ -1,5 +1,7 @@
 import { API_URL, debounce, SEARCH_DEBOUNCE_DELAY, DEFAULT_SECONDARY_COLOR, ICON_HIGHLIGHT_COLOR  } from '../scripts/core.js';
 
+const mainContainerTempalte = document.getElementById('main-container');
+
 const favoritesContainer = document.getElementById('favorites-container');
 const foodItemTemplate = document.getElementById('food-item-template');
 const bagCountElement = document.getElementById('bag-count');
@@ -11,13 +13,22 @@ const removeIconElement = document.getElementById('remove');
 const categoriesContainer = document.getElementById('categories');
 
 const foodItemsContainer = document.getElementById('food-items-container');
+const foodPageContainerElement = document.getElementById('food-page-container-wrapper');
 const navigateElement = document.getElementById('navigate-back');
+
+const pageViewFoodCartBtnElement = document.getElementById('selected-food-button');
+const pageViewFoodCartCountDecrementElement = document.getElementById('selected-food-count-decrement');
+const pageViewFoodCartCountIncrementElement = document.getElementById('selected-food-count-increment');
 
 let categories = [];
 let recipes = [];
 let favorites = [];
 let cartItemsCount = 0;
 let activeCategoryIndex = -1;
+
+
+let selectedFoodItem;
+let selectedFoodItemDetailsElement;
 
 /**
  * interface for htmlTemplateConfig {
@@ -71,12 +82,10 @@ const updateBagCountElement = () => {
     bagCountElement.textContent = cartItemsCount;
     bagCountElement.hidden = false;
     countIconSVGElement.setAttribute('fill', ICON_HIGHLIGHT_COLOR);
-    // render highlighted state;
   } else {
     bagCountElement.textContent = 0;
     bagCountElement.hidden = true;
     countIconSVGElement.setAttribute('fill', DEFAULT_SECONDARY_COLOR);
-    // render default state
   }
 }
 
@@ -143,6 +152,88 @@ const getCategories = () => {
   });
 }
 
+const setFoodPageDetails = () => {
+  mainContainerTempalte.hidden = true;
+  foodPageContainerElement.classList.remove('hidden');
+  navigateElement.classList.remove('hidden');
+
+  // set dom details
+  const pageViewFoodNameEl = document.getElementById('selected-food-name');
+  const pageViewFoodPriceEl = document.getElementById('selected-food-price');
+  const pageViewFoodCountContainerEl = document.getElementById('selected-food-update-item');
+  const pageViewFoodCountCountEl = document.getElementById('selected-food-count');
+  const pageViewFoodCategoryEl = document.getElementById('selected-food-category');
+  const pageViewFoodRatingsEl = document.getElementById('selected-food-ratings');
+  const pageViewFoodDetailsEl = document.getElementById('selected-food-details');
+
+  pageViewFoodNameEl.textContent = selectedFoodItem.name; // set name
+  pageViewFoodPriceEl.textContent = `₹${selectedFoodItem.price}`; // set price
+  pageViewFoodCartBtnElement.textContent = selectedFoodItem.isFavourite ? 'REORDER' : 'ADD TO BAG'; // set button name
+  pageViewFoodCategoryEl.textContent = `Category: ${selectedFoodItem.category}`; // set category
+  const roundedRating = selectedFoodItem.rating.toFixed(1);
+  pageViewFoodRatingsEl.textContent = `${roundedRating} Rating, (${selectedFoodItem.reviews} Reviews)`; // set ratings
+  pageViewFoodDetailsEl.textContent = selectedFoodItem.details; // set details
+  
+  // If item count for the selected food is 0 or undefined, then show the 
+  // usual button
+  if (!selectedFoodItem.itemCount) {
+    pageViewFoodCartBtnElement.hidden = false;
+    if (!pageViewFoodCountContainerEl.classList.contains('hidden')) {
+      pageViewFoodCountContainerEl.classList.add('hidden');
+    }
+  } else {
+    pageViewFoodCartBtnElement.hidden = true;
+    if (pageViewFoodCountContainerEl.classList.contains('hidden')) {
+      pageViewFoodCountContainerEl.classList.remove('hidden');
+    }
+    pageViewFoodCountCountEl.textContent = selectedFoodItem.itemCount;
+  }
+
+}
+
+const recheckBaseSelectedFoodItemCount = () => {
+  const refFoodItemCartBtnEl = selectedFoodItemDetailsElement.querySelector('.add-cart');
+  const refFoodItemCountContainerEl = selectedFoodItemDetailsElement.querySelector('.update-item');
+  const refFoodItemCountEl = selectedFoodItemDetailsElement.querySelector('.update-item .item-count');
+
+  if (selectedFoodItem.itemCount && selectedFoodItem.itemCount > 0) {
+    refFoodItemCartBtnEl.hidden = true;
+    refFoodItemCountEl.textContent = selectedFoodItem.itemCount;
+    refFoodItemCountContainerEl.classList.remove('hidden');
+  } else {
+    refFoodItemCartBtnEl.hidden = false;
+    refFoodItemCountContainerEl.classList.add('hidden');
+  }
+}
+
+const decreaseFoodItemCount = (foodItem, addToCartElement, foodItemCountContainerElement, foodItemCountElement) => {
+  if (foodItem.itemCount === 1) {
+    foodItem.itemCount = 0;
+    foodItemCountContainerElement.classList.add('hidden');
+    addToCartElement.hidden = false;
+  } else {
+    foodItem.itemCount -= 1;
+    foodItemCountElement.textContent = foodItem.itemCount;
+  }
+  decrementGlobalCartCount();
+}
+
+const addFoodItemToCart = (foodItem, addToCartElement, foodItemCountContainerElement) => {
+  if (foodItem.itemCount == null) {
+    foodItem.itemCount = 0;
+  }
+  foodItem.itemCount = 1;
+  addToCartElement.hidden = true;
+  foodItemCountContainerElement.classList.remove('hidden');
+  incrementGlobalCartCount();
+}
+
+const incrementFoodItemCount = (foodItem, foodItemCountElement) => {
+  foodItem.itemCount += 1;
+  foodItemCountElement.textContent = foodItem.itemCount;
+  incrementGlobalCartCount();
+}
+
 const renderFoodItem = (foodItem, btnName) => {
   // Main container item element
   const element = foodItemTemplate.content.cloneNode(true);
@@ -153,7 +244,9 @@ const renderFoodItem = (foodItem, btnName) => {
     title: foodItem.name,
     loading: 'lazy'
   });
+
   const queryStringFooter = '.item .description';
+  const baseFoodDetailsElement = element.querySelector(queryStringFooter);
   const spanName = element.querySelector(`${queryStringFooter} .details-name`);
   spanName.textContent = foodItem.name;
   const spanPrice = element.querySelector(`${queryStringFooter} .details-price`);
@@ -175,36 +268,26 @@ const renderFoodItem = (foodItem, btnName) => {
     foodItemCountElement.textContent = foodItem.itemCount;
   }
 
+  imageElement.addEventListener('click', () => {
+    selectedFoodItem = foodItem;
+    selectedFoodItemDetailsElement = baseFoodDetailsElement;
+    setFoodPageDetails();
+  });
+
   // Clicking incremement button should keep decreasing item count
   // If it reaches 1, then hide this containe and show reorder button
   decrementBtn.addEventListener('click', () => {
-    if (foodItem.itemCount === 1) {
-      foodItem.itemCount = 0;
-      updateItemContainer.classList.add('hidden');
-      addToCartElement.hidden = false;
-    } else {
-      foodItem.itemCount -= 1;
-      foodItemCountElement.textContent = foodItem.itemCount;
-    }
-    decrementGlobalCartCount();
+    decreaseFoodItemCount(foodItem, addToCartElement, updateItemContainer, foodItemCountElement)
   });
 
   // Clicking incremement button should keep increasing item count
   incrementBtn.addEventListener('click', () => {
-    foodItem.itemCount += 1;
-    foodItemCountElement.textContent = foodItem.itemCount;
-    incrementGlobalCartCount();
+    incrementFoodItemCount(foodItem, foodItemCountElement);
   })
   // Clicking reorder button should hide the Reorder button
   // and start the increment counter
   addToCartElement.addEventListener('click', () => {
-    if (foodItem.itemCount == null) {
-      foodItem.itemCount = 0;
-    }
-    foodItem.itemCount += 1;
-    addToCartElement .hidden = true;
-    updateItemContainer.classList.remove('hidden');
-    incrementGlobalCartCount();
+    addFoodItemToCart(foodItem, addToCartElement, updateItemContainer)
   });
   return element.querySelector('.item');
 }
@@ -272,6 +355,37 @@ const searchInputFunction = (event) => {
   }
 }
 
+// Clicking incremement button should keep decreasing item count
+// If it reaches 1, then hide this containe and show reorder button
+pageViewFoodCartCountDecrementElement.addEventListener('click', () => {
+  decreaseFoodItemCount(
+    selectedFoodItem,
+    pageViewFoodCartBtnElement,
+    document.getElementById('selected-food-update-item'),
+    document.getElementById('selected-food-count')
+  );
+  recheckBaseSelectedFoodItemCount();
+});
+
+// Clicking incremement button should keep increasing item count
+pageViewFoodCartCountIncrementElement.addEventListener('click', () => {
+  incrementFoodItemCount(
+    selectedFoodItem,
+    document.getElementById('selected-food-count')
+  );
+  recheckBaseSelectedFoodItemCount();
+})
+// Clicking reorder button should hide the Reorder button
+// and start the increment counter
+pageViewFoodCartBtnElement.addEventListener('click', () => {
+  addFoodItemToCart(
+    selectedFoodItem,
+    pageViewFoodCartBtnElement,
+    document.getElementById('selected-food-update-item')
+  );
+  recheckBaseSelectedFoodItemCount();
+});
+
 removeIconElement.addEventListener('click', () => {
   searchInputElement.value = null;
   removeIconElement.hidden = true;
@@ -280,5 +394,11 @@ removeIconElement.addEventListener('click', () => {
 
 const debouncedFunction = debounce(searchInputFunction, SEARCH_DEBOUNCE_DELAY);
 searchInputElement.addEventListener('keyup', debouncedFunction);
+
+navigateElement.addEventListener('click', () => {
+  mainContainerTempalte.hidden = false;
+  foodPageContainerElement.classList.add('hidden');
+  navigateElement.classList.add('hidden');
+})
 
 getData();

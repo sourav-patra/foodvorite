@@ -66,7 +66,16 @@ header.banner {
   height: calc(100vh - 70px);
   margin-top: 70px;
   padding: 1em;
+  position: absolute;
+  z-index: 1;
+  width: 100vw;
   overflow: auto;
+  &.hidden {
+    transform: translateX(-100vw);
+    height: 0;
+    margin: 0;
+    transition: all 0.2s ease;
+  }
   .favorites {
     margin-bottom: 1em;
     &-header {
@@ -347,6 +356,126 @@ header.banner {
   }
 }
 
+.food-page-container-wrapper {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  overflow: auto;
+  position: absolute;
+  z-index: 2;
+  width: 100vw;
+  transition: transform 0.3s ease;
+  &.hidden {
+    transform: translateX(200vw);
+    width: 0;
+    transition: transform 0.3s ease;
+  }
+  .food-page-container {
+    max-width: 600px;
+  
+    .food-image-container {
+      margin: 0;
+      @include flex-center();
+      max-height: 500px;
+      img {
+        width: 100%;
+      }
+    }
+    .food-description-container {
+      padding: 1em 0;
+      .image-footer {
+        padding-bottom: 2em;
+        @include flex-space-between();
+        border-bottom: 1px solid $secondary;
+        .details {
+          display: flex;
+          flex-direction: column;
+          padding-right: 5px;
+          font-weight: 500;
+          &-name {
+            font-size: 14px;
+          }
+          &-price {
+            font-size: 1em;
+            padding-top: 0.4em;
+          }
+        }
+        .add-cart {
+          border: none;
+          height: 30px;
+          outline: none;
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: $bg-primary;
+          color: #fff;
+          font-size: 12px;
+          text-transform: uppercase;
+          cursor: pointer;
+          &:hover {
+            filter: brightness(110%);
+            transition: filter 0.2s ease;
+          }
+        }
+        .update-item {
+          border-radius: 5px;
+          min-width: 100px;
+          text-align: center;
+          background: $bg-primary;
+          color: #fff;
+          font-size: 12px;
+          height: 30px;
+          padding: 0 0.5em;
+          @include flex-space-between();
+          .decrement, .increment {
+            cursor: pointer;
+            display: flex;
+          }
+          .item-count {
+            font-size: 12px;
+          }
+          &.hidden {
+            display: none;
+          }
+        }
+      }
+  
+      .food-category-ratings {
+        @include flex-space-between();
+        padding-top: 1em;
+        font-size: 14px;
+        color: $secondary;
+  
+        .ratings {
+          display: flex;
+          &-icon {
+            display: flex;
+            margin-right: 0.5em;
+          }
+        }
+      }
+  
+      .food-description {
+        padding: 1.5em 0 1em;
+        &-header {
+          font-size: 15px;
+          font-weight: 500;
+        }
+        &-main {
+          padding-top: 1em;
+          font-size: 14px;
+          color: $secondary;
+        }
+      }
+  
+  
+    }
+  }
+}
+
+
+
 @media screen and (max-width: 1366px) {
   .container .recipes-container .food-items-container .item {
     width: calc(33.33% - 1em);
@@ -366,6 +495,12 @@ header.banner {
     &:last-of-type {
       margin: 0;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .food-page-container-wrapper .food-page-container .food-description-container {
+    padding: 1em;
   }
 }
 
