@@ -356,6 +356,16 @@ header.banner {
   }
 }
 
+.no-dish {
+  min-height: 100px;
+  width: 100%;
+  position: relative;
+  span {
+    font-size: 14px;
+    @include absolute-center();
+  }
+}
+
 .food-page-container-wrapper {
   display: flex;
   justify-content: center;

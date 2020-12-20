@@ -278,6 +278,17 @@ header.banner {
           .container .recipes-container .food-items-container .item .description .update-item.hidden {
             display: none; }
 
+.no-dish {
+  min-height: 100px;
+  width: 100%;
+  position: relative; }
+  .no-dish span {
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
+
 .food-page-container-wrapper {
   display: flex;
   justify-content: center;

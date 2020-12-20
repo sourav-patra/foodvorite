@@ -20,6 +20,8 @@ const pageViewFoodCartBtnElement = document.getElementById('selected-food-button
 const pageViewFoodCartCountDecrementElement = document.getElementById('selected-food-count-decrement');
 const pageViewFoodCartCountIncrementElement = document.getElementById('selected-food-count-increment');
 
+const noDishFoundElement = document.getElementById('no-dish');
+
 let categories = [];
 let recipes = [];
 let favorites = [];
@@ -266,6 +268,8 @@ const renderFoodItem = (foodItem, btnName) => {
     addToCartElement.hidden = true;
     updateItemContainer.classList.remove('hidden');
     foodItemCountElement.textContent = foodItem.itemCount;
+  } else {
+    foodItemCountElement.textContent = 1;
   }
 
   imageElement.addEventListener('click', () => {
@@ -325,6 +329,11 @@ const filterFoodItems = () => {
     if (activeCategoryIndex > -1) {
       const newFilteredItems = filteredItems || recipes;
       filteredItems = newFilteredItems.filter(recipe => recipe.category === categories[activeCategoryIndex].name);
+    }
+    if (filterFoodItems && !filterFoodItems.length) {
+      noDishFoundElement.hidden = false;
+    } else {
+      noDishFoundElement.hidden = true;
     }
     getFoodItems(filteredItems);
   } catch (error) {
