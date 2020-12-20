@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Foodvorite</title>
   <link rel="icon" href="assets/pics/favicon.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap">
   <link rel="stylesheet" href="styles/css/style.css">
 <body>
   <!-- Banner -->
@@ -39,6 +38,50 @@
       </header>
       <!-- Favorites container -->
       <main class="favorites-container" id="favorites-container">
+        <div id="favorites-loader" style="display: inherit;">
+          <section class="loading-fav-item">
+            <div class="loading-fav-item-image">
+            </div>
+            <section class="loading-fav-item-description">
+              <div class="loading-fav-item-description-details">
+              </div>
+              <div class="loading-fav-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 2 -->
+          <section class="loading-fav-item">
+            <div class="loading-fav-item-image">
+            </div>
+            <section class="loading-fav-item-description">
+              <div class="loading-fav-item-description-details">
+              </div>
+              <div class="loading-fav-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 3 -->
+          <section class="loading-fav-item">
+            <div class="loading-fav-item-image">
+            </div>
+            <section class="loading-fav-item-description">
+              <div class="loading-fav-item-description-details">
+              </div>
+              <div class="loading-fav-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 4 -->
+          <section class="loading-fav-item">
+            <div class="loading-fav-item-image">
+            </div>
+            <section class="loading-fav-item-description">
+              <div class="loading-fav-item-description-details">
+              </div>
+              <div class="loading-fav-item-description-add-cart"></div>
+            </section>
+          </section>
+        </div>
       </main>
     </section>
     <!-- Search -->
@@ -78,6 +121,51 @@
       </section>
       <!-- Main food items container -->
       <section class="food-items-container" id="food-items-container">
+        <div id="food-items-loader" class="food-items-loader">
+          <!-- skeleton screen 1 -->
+          <section class="loading-food-item">
+            <div class="loading-food-item-image">
+            </div>
+            <section class="loading-food-item-description">
+              <div class="loading-food-item-description-details">
+              </div>
+              <div class="loading-food-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 2 -->
+          <section class="loading-food-item">
+            <div class="loading-food-item-image">
+            </div>
+            <section class="loading-food-item-description">
+              <div class="loading-food-item-description-details">
+              </div>
+              <div class="loading-food-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 3 -->
+          <section class="loading-food-item">
+            <div class="loading-food-item-image">
+            </div>
+            <section class="loading-food-item-description">
+              <div class="loading-food-item-description-details">
+              </div>
+              <div class="loading-food-item-description-add-cart"></div>
+            </section>
+          </section>
+
+          <!-- skeleton screen 4 -->
+          <section class="loading-food-item">
+            <div class="loading-food-item-image">
+            </div>
+            <section class="loading-food-item-description">
+              <div class="loading-food-item-description-details">
+              </div>
+              <div class="loading-food-item-description-add-cart"></div>
+            </section>
+          </section>
+        </div>
       </section>
       <section class="no-dish" id="no-dish" hidden>
         <span>Uh oh! Couldn't find any dish!</span>
@@ -121,7 +209,7 @@
     <section class="food-page-container">
       <!-- Selected food item image -->
       <figure class="food-image-container">
-        <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"/>
+        <img src="" id="selected-food-image"/>
       </figure>
       <!-- Selected food item name, price and item count in the bag -->
       <section class="food-description-container">

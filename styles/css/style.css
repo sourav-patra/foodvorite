@@ -86,7 +86,9 @@ header.banner {
         margin-right: 1em; }
       .container .favorites-container .item .image {
         margin: 0;
-        cursor: pointer; }
+        cursor: pointer;
+        min-width: 300px;
+        min-height: 200px; }
         .container .favorites-container .item .image img {
           max-width: 300px; }
       .container .favorites-container .item .description {
@@ -226,6 +228,7 @@ header.banner {
       box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2); }
       .container .recipes-container .food-items-container .item .image {
         margin: 0;
+        min-height: 200px;
         cursor: pointer; }
         .container .recipes-container .food-items-container .item .image img {
           width: 100%; }
@@ -290,6 +293,103 @@ header.banner {
     left: 50%;
     transform: translate(-50%, -50%); }
 
+.loading-fav-item:not(:last-of-type) {
+  margin-right: 1em; }
+
+.loading-fav-item-image {
+  height: 200px;
+  width: 300px;
+  background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+  background-size: 100rem 64rem;
+  animation-duration: 1.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  content: " "; }
+
+.loading-fav-item-description {
+  padding: 0.5em 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+  .loading-fav-item-description-details {
+    height: 30px;
+    width: 150px;
+    background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+    background-size: 100rem 64rem;
+    animation-duration: 1.8s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    content: " "; }
+  .loading-fav-item-description-add-cart {
+    height: 30px;
+    width: 100px;
+    background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+    background-size: 100rem 64rem;
+    animation-duration: 1.8s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    content: " "; }
+
+.food-items-loader {
+  display: inherit;
+  flex-wrap: wrap;
+  width: 100%; }
+  .food-items-loader .loading-food-item {
+    width: calc(25% - 1em);
+    border-radius: 5px;
+    margin: 0 1em 1em 0;
+    box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2); }
+    .food-items-loader .loading-food-item-image {
+      min-height: 250px;
+      min-width: 250px;
+      background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+      background-size: 100rem 64rem;
+      animation-duration: 1.8s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-name: placeHolderShimmer;
+      animation-timing-function: linear;
+      content: " "; }
+    .food-items-loader .loading-food-item-description {
+      padding: 0.5em 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; }
+      .food-items-loader .loading-food-item-description-details {
+        height: 30px;
+        width: 150px;
+        background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+        background-size: 100rem 64rem;
+        animation-duration: 1.8s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: placeHolderShimmer;
+        animation-timing-function: linear;
+        content: " "; }
+      .food-items-loader .loading-food-item-description-add-cart {
+        height: 30px;
+        width: 100px;
+        background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+        background-size: 100rem 64rem;
+        animation-duration: 1.8s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: placeHolderShimmer;
+        animation-timing-function: linear;
+        content: " "; }
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -46.8rem 0; }
+  100% {
+    background-position: 46.8rem 0; } }
+
 .food-page-container-wrapper {
   display: flex;
   justify-content: center;
@@ -305,7 +405,8 @@ header.banner {
     width: 0;
     transition: transform 0.3s ease; }
   .food-page-container-wrapper .food-page-container {
-    max-width: 600px; }
+    max-width: 600px;
+    padding: 1em 0; }
     .food-page-container-wrapper .food-page-container .food-image-container {
       margin: 0;
       display: flex;
@@ -389,23 +490,29 @@ header.banner {
           color: #ababab; }
 
 @media screen and (max-width: 1366px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: calc(33.33% - 1em); } }
 
 @media screen and (max-width: 1024px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: calc(50% - 1em); } }
 
 @media screen and (max-width: 650px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: 100%;
     margin: 0 0 1em 0; }
-    .container .recipes-container .food-items-container .item:last-of-type {
+    .container .recipes-container .food-items-container .item:last-of-type,
+    .container .recipes-container .food-items-container .food-items-loader .loading-food-item:last-of-type {
       margin: 0; } }
 
 @media screen and (max-width: 600px) {
-  .food-page-container-wrapper .food-page-container .food-description-container {
-    padding: 1em; } }
+  .food-page-container-wrapper .food-page-container {
+    padding: 0; }
+    .food-page-container-wrapper .food-page-container .food-description-container {
+      padding: 1em; } }
 
 ::-webkit-scrollbar {
   width: 0.45em;

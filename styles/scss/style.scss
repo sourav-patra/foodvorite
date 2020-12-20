@@ -4,6 +4,17 @@ $columns: 1;
 $bg-primary: #41c379;
 $secondary: #ababab;
 
+$palette-grey: (
+  m0: #343434,
+  l1: #4a4c56,
+  l2: #585e74,
+  l3: #767b8b,
+  l4: #8f95a7,
+  l5: #b8bdc8,
+  l6: #d7dae1,
+  l7: #dee1e6
+);
+
 // Mixins
 @mixin flex-center {
   display: flex;
@@ -20,6 +31,22 @@ $secondary: #ababab;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+@mixin ripple {
+  background: linear-gradient(
+    to right,
+    map-get($palette-grey, "l7") 8%,
+    map-get($palette-grey, "l5") 50%,
+    map-get($palette-grey, "l7") 92%
+  );
+  background-size: 100rem 64rem;
+
+  animation-duration: 1.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  content: " ";
 }
 // -----------------------------------
 
@@ -122,6 +149,8 @@ header.banner {
         .image {
           margin: 0;
           cursor: pointer;
+          min-width: 300px;
+          min-height: 200px;
           img {
             max-width: 300px;
           }
@@ -292,6 +321,7 @@ header.banner {
         box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.2);
         .image {
           margin: 0;
+          min-height: 200px;
           cursor: pointer;
           img {
             width: 100%;
@@ -367,6 +397,72 @@ header.banner {
   }
 }
 
+.loading-fav-item {
+  &:not(:last-of-type) {
+    margin-right: 1em;
+  }
+  &-image {
+    height: 200px;
+    width: 300px;
+    @include ripple();
+  }
+  &-description {
+    padding: 0.5em 0;
+    @include flex-space-between();
+    &-details {
+      height: 30px;
+      width: 150px;
+      @include ripple();
+    }
+    &-add-cart {
+      height: 30px;
+      width: 100px;
+      @include ripple();
+    }
+  }
+}
+.food-items-loader {
+  display: inherit;
+  flex-wrap: wrap;
+  width: 100%;
+  .loading-food-item {
+    width: calc(25% - 1em);
+    border-radius: 5px;
+    margin: 0 1em 1em 0;
+    box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.2);
+    &-image {
+      min-height: 250px;
+      min-width: 250px;
+      @include ripple();
+    }
+    &-description {
+      padding: 0.5em 1em;
+      @include flex-space-between();
+      &-details {
+        height: 30px;
+        width: 150px;
+        @include ripple();
+      }
+      &-add-cart {
+        height: 30px;
+        width: 100px;
+        @include ripple();
+      }
+    }
+  }
+}
+
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -46.8rem 0;
+  }
+
+  100% {
+    background-position: 46.8rem 0;
+  }
+}
+
 .food-page-container-wrapper {
   display: flex;
   justify-content: center;
@@ -384,7 +480,7 @@ header.banner {
   }
   .food-page-container {
     max-width: 600px;
-  
+    padding: 1em 0;
     .food-image-container {
       margin: 0;
       @include flex-center();
@@ -479,8 +575,6 @@ header.banner {
           color: $secondary;
         }
       }
-  
-  
     }
   }
 }
@@ -488,19 +582,22 @@ header.banner {
 
 
 @media screen and (max-width: 1366px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: calc(33.33% - 1em);
   }
 }
 
 @media screen and (max-width: 1024px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: calc(50% - 1em);
   }
 }
 
 @media screen and (max-width: 650px) {
-  .container .recipes-container .food-items-container .item {
+  .container .recipes-container .food-items-container .item,
+  .container .recipes-container .food-items-container .food-items-loader .loading-food-item {
     width: 100%;
     margin: 0 0 1em 0;
     &:last-of-type {
@@ -510,8 +607,11 @@ header.banner {
 }
 
 @media screen and (max-width: 600px) {
-  .food-page-container-wrapper .food-page-container .food-description-container {
-    padding: 1em;
+  .food-page-container-wrapper .food-page-container {
+    padding: 0;
+    .food-description-container {
+      padding: 1em;
+    }
   }
 }
 

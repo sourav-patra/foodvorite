@@ -1,4 +1,16 @@
-import { API_URL, debounce, SEARCH_DEBOUNCE_DELAY, DEFAULT_SECONDARY_COLOR, ICON_HIGHLIGHT_COLOR  } from '../scripts/core.js';
+import { 
+  API_URL,
+  debounce,
+  setAttributesForElement,
+  SEARCH_DEBOUNCE_DELAY,
+  DEFAULT_SECONDARY_COLOR,
+  ICON_HIGHLIGHT_COLOR,
+  FAVORITE_BTN_NAME,
+  MAIN_FOOD_BTN_NAME,
+  SAMPLE_IMAGE_APIS,
+  Category,
+  Recipe
+} from '../scripts/core.js';
 
 const mainContainerTempalte = document.getElementById('main-container');
 
@@ -21,27 +33,24 @@ const pageViewFoodCartCountDecrementElement = document.getElementById('selected-
 const pageViewFoodCartCountIncrementElement = document.getElementById('selected-food-count-increment');
 
 const noDishFoundElement = document.getElementById('no-dish');
-
-let categories = [];
-let recipes = [];
-let favorites = [];
-let cartItemsCount = 0;
-let activeCategoryIndex = -1;
+const favoritesLoadingElement = document.getElementById('favorites-loader');
+const foodItemsLoadingElement = document.getElementById('food-items-loader');
 
 
-let selectedFoodItem;
-let selectedFoodItemDetailsElement;
+// State management; resusable variables
+let categories = []; // stores list of categories
+let recipes = []; // stores list of all food items
+let favorites = []; // stores favorite food items list
+let cartItemsCount = 0; // store global bag items count
+let activeCategoryIndex = -1; // stores active category index, default is -1
 
-/**
- * interface for htmlTemplateConfig {
- * itemClass: string
- * itemImageClass: string
- * itemFooterClass
- * }
- */
+
+let selectedFoodItem; // stores selected food item object
+let selectedFoodItemDetailsElement; // stores selected food item DOM Node for reference in page 2
 
 /**
- * Get foodfavorites data
+ * Function to fetch the inital data from API 
+ * and render them in the DOM
  */
 const getData = async () => {
   try {
@@ -57,21 +66,17 @@ const getData = async () => {
   }
 }
 
-const onImageLoad = (event) => {
-  // do something here
-}
-
-const setAttributesForGivenElement = (element, attributesObj) => {
-  for (const key in attributesObj) {
-    element.setAttribute(key, attributesObj[key]);
-  }
-}
-
+/**
+ * Function to increase the global bag count
+ */
 const incrementGlobalCartCount = () => {
   cartItemsCount += 1;
   updateBagCountElement();
 }
 
+/**
+ * Function to decrease the global bag count
+ */
 const decrementGlobalCartCount = () => {
   if (cartItemsCount > 0) {
     cartItemsCount -= 1;
@@ -79,6 +84,10 @@ const decrementGlobalCartCount = () => {
   updateBagCountElement();
 }
 
+/**
+ * Function to change the view when the bag count
+ * transitions from non-zero integer to zero and vice-versa
+ */
 const updateBagCountElement = () => {
   if (cartItemsCount) {
     bagCountElement.textContent = cartItemsCount;
@@ -91,14 +100,30 @@ const updateBagCountElement = () => {
   }
 }
 
+/**
+ * Function to filter out the favorite items
+ * from main food item list
+ * using the flag `isFavourite`
+ * NOTE: As it is not mentioned in the question, I deepcloned
+ * the objects so that references are not carried from the main list
+ * As a result, 'adding an item' to cart from main list won't reflect in 
+ * the favourites list
+ */
 const getFavorites = () => {
-  favorites = recipes.filter(recipe => recipe.isFavourite);
-  favorites.forEach(favoriteItem => {
-    const elementItem = renderFoodItem(favoriteItem, 'reorder');
+  favorites = JSON.parse(JSON.stringify(recipes.filter(recipe => recipe.isFavourite)));
+  favorites.forEach((favoriteItem, index) => {
+    const elementItem = renderFoodItem(favoriteItem, index);
     favoritesContainer.appendChild(elementItem);
   });
+  favoritesLoadingElement.style.display = "none";
 }
 
+/**
+ * Function to render the DOM element for a category item
+ * @param {Category} categoryItem 
+ * @param {number} index 
+ * @returns {HTMLElement}
+ */
 const renderCategoryItem = (categoryItem, index) => {
   // Main category card
   const elementItem = document.createElement('div');
@@ -108,7 +133,7 @@ const renderCategoryItem = (categoryItem, index) => {
   figureElement.classList.add('categories-item-icon');
   // Image element
   const imageElement = document.createElement('img');
-  setAttributesForGivenElement(imageElement, {
+  setAttributesForElement(imageElement, {
     src: categoryItem.image,
     alt: categoryItem.name,
     title: categoryItem.name
@@ -147,6 +172,9 @@ const renderCategoryItem = (categoryItem, index) => {
   return elementItem;
 }
 
+/**
+ * Function render the DOM elements for all categories in the category list
+ */
 const getCategories = () => {
   categories.forEach((categoryItem, index) => {
     const elementItem = renderCategoryItem(categoryItem, index);
@@ -154,12 +182,22 @@ const getCategories = () => {
   });
 }
 
+/**
+ * Function to set the food item details in the 2nd page
+ * on clicking the image on any food item in the 1st page
+ */
 const setFoodPageDetails = () => {
   mainContainerTempalte.hidden = true;
   foodPageContainerElement.classList.remove('hidden');
   navigateElement.classList.remove('hidden');
 
   // set dom details
+  const pageViewFoodImageEl = document.getElementById('selected-food-image');
+  setAttributesForElement(pageViewFoodImageEl, {
+    src: selectedFoodItem.image,
+    alt: selectedFoodItem.name,
+    title: selectedFoodItem.name
+  })
   const pageViewFoodNameEl = document.getElementById('selected-food-name');
   const pageViewFoodPriceEl = document.getElementById('selected-food-price');
   const pageViewFoodCountContainerEl = document.getElementById('selected-food-update-item');
@@ -170,7 +208,7 @@ const setFoodPageDetails = () => {
 
   pageViewFoodNameEl.textContent = selectedFoodItem.name; // set name
   pageViewFoodPriceEl.textContent = `₹${selectedFoodItem.price}`; // set price
-  pageViewFoodCartBtnElement.textContent = selectedFoodItem.isFavourite ? 'REORDER' : 'ADD TO BAG'; // set button name
+  pageViewFoodCartBtnElement.textContent = selectedFoodItem.isFavourite ? FAVORITE_BTN_NAME : MAIN_FOOD_BTN_NAME; // set button name
   pageViewFoodCategoryEl.textContent = `Category: ${selectedFoodItem.category}`; // set category
   const roundedRating = selectedFoodItem.rating.toFixed(1);
   pageViewFoodRatingsEl.textContent = `${roundedRating} Rating, (${selectedFoodItem.reviews} Reviews)`; // set ratings
@@ -194,6 +232,14 @@ const setFoodPageDetails = () => {
 
 }
 
+/**
+ * An important method.
+ * When the food item count is updated (by 'adding to cart')
+ * in the second page, the same should be reflected in the food item card details
+ * in the list in 1st page.
+ * This function uses the stored element references, gets the element by query selecting
+ * and updates the values accordingly
+ */
 const recheckBaseSelectedFoodItemCount = () => {
   const refFoodItemCartBtnEl = selectedFoodItemDetailsElement.querySelector('.add-cart');
   const refFoodItemCountContainerEl = selectedFoodItemDetailsElement.querySelector('.update-item');
@@ -209,6 +255,14 @@ const recheckBaseSelectedFoodItemCount = () => {
   }
 }
 
+/**
+ * Function to decrease the food item count on clicking '-'
+ * on any food item element's button
+ * @param {Recipe} foodItem 
+ * @param {HTMLElement} addToCartElement 
+ * @param {HTMLElement} foodItemCountContainerElement 
+ * @param {HTMLElement} foodItemCountElement 
+ */
 const decreaseFoodItemCount = (foodItem, addToCartElement, foodItemCountContainerElement, foodItemCountElement) => {
   if (foodItem.itemCount === 1) {
     foodItem.itemCount = 0;
@@ -221,6 +275,14 @@ const decreaseFoodItemCount = (foodItem, addToCartElement, foodItemCountContaine
   decrementGlobalCartCount();
 }
 
+/**
+ * Function to increase the food item count
+ * whenever 'ADD TO BAG' or 'REORDER' is clicked
+ * on any food item element
+ * @param {Recipe} foodItem 
+ * @param {HTMLElement} addToCartElement 
+ * @param {HTMLElement} foodItemCountContainerElement 
+ */
 const addFoodItemToCart = (foodItem, addToCartElement, foodItemCountContainerElement) => {
   if (foodItem.itemCount == null) {
     foodItem.itemCount = 0;
@@ -231,18 +293,33 @@ const addFoodItemToCart = (foodItem, addToCartElement, foodItemCountContainerEle
   incrementGlobalCartCount();
 }
 
+/**
+ * Function to increase the food item count on clicking '+'
+ * on any food item element's button
+ * @param {Recipe} foodItem
+ * @param {HTMLElement} foodItemCountElement 
+ */
 const incrementFoodItemCount = (foodItem, foodItemCountElement) => {
   foodItem.itemCount += 1;
   foodItemCountElement.textContent = foodItem.itemCount;
   incrementGlobalCartCount();
 }
 
-const renderFoodItem = (foodItem, btnName) => {
+/**
+ * Function to draw the food item element
+ * for any food item object passed to the function
+ * @param {Recipe} foodItem 
+ * @param {number} index
+ * @returns {HTMLElement}
+ */
+const renderFoodItem = (foodItem, index) => {
   // Main container item element
+  // As FOOD IMAGES are not present, manually setting them here
+  foodItem.image = SAMPLE_IMAGE_APIS[index];
   const element = foodItemTemplate.content.cloneNode(true);
   const imageElement = element.querySelector('.item .image img');
-  setAttributesForGivenElement(imageElement, {
-    src: 'https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+  setAttributesForElement(imageElement, {
+    src: foodItem.image,
     alt: foodItem.name,
     title: foodItem.name,
     loading: 'lazy'
@@ -257,7 +334,7 @@ const renderFoodItem = (foodItem, btnName) => {
 
   // Button - Reorder / Add to Bag
   const addToCartElement = element.querySelector(`${queryStringFooter} .add-cart`);
-  addToCartElement.textContent = btnName;
+  addToCartElement.textContent = foodItem.isFavourite ? FAVORITE_BTN_NAME : MAIN_FOOD_BTN_NAME;
 
   const updateItemContainer = element.querySelector(`${queryStringFooter} .update-item`);
   const decrementBtn = element.querySelector(`${queryStringFooter} .update-item .decrement`);
@@ -297,28 +374,48 @@ const renderFoodItem = (foodItem, btnName) => {
   return element.querySelector('.item');
 }
 
-const clearCurrentFoodItemsDOM = () => {
-  const foodItemElements = foodItemsContainer.children;
-  for (let i = foodItemElements.length - 1; i >= 0; i--) {
+/**
+ * Function to clear the food items DOM elements
+ * whenever a filter is applied
+ * Notice all the elements are not cleared.
+ * The 1st child is actually the loader element, and we need it to show
+ * latency whenever any filter is in process (assuming it done server-side)
+ * @param {HTMLElement[]} foodItemElements 
+ */
+const clearCurrentFoodItemsDOM = (foodItemElements = []) => {
+  for (let i = foodItemElements.length - 1; i > 0; i--) {
     foodItemsContainer.removeChild(foodItemElements[i]);
   }
 }
 
+/**
+ * Function to get a list of filtered or original 
+ * food items list and render the DOM elements for each food item
+ * Before starting the rendering, toggle the loader element display
+ * After the rendering, hide the loader again
+ * @param {Recipe[]} filteredArray 
+ */
 const getFoodItems = (filteredArray) => {
-  if (foodItemsContainer.children.length) {
-    clearCurrentFoodItemsDOM();
+  const foodItemElements = foodItemsContainer.children;
+  if (foodItemElements && foodItemElements.length > 1) {
+    clearCurrentFoodItemsDOM(foodItemElements);
   }
+  foodItemsLoadingElement.style.display = "inherit";
   const itemsArray = filteredArray || recipes;
-  itemsArray.forEach(foodItem => {
-    const element = renderFoodItem(foodItem, 'add to bag');
+  itemsArray.forEach((foodItem, index) => {
+    const element = renderFoodItem(foodItem, index);
     foodItemsContainer.appendChild(element);
-  })
+  });
+  foodItemsLoadingElement.style.display = "none";
+  
 }
 
 /**
- * Globla filter function applicable when either
- * 1. search input is provided
+ * Global filter function applicable when either
+ * 1. a search input is provided
  * 2. a category is chosen or removed
+ * If the filtered items list is empty, then show
+ * 'no-dish' element
  */
 const filterFoodItems = () => {
   try {
@@ -331,7 +428,7 @@ const filterFoodItems = () => {
       const newFilteredItems = filteredItems || recipes;
       filteredItems = newFilteredItems.filter(recipe => recipe.category === categories[activeCategoryIndex].name);
     }
-    if (filterFoodItems && !filterFoodItems.length) {
+    if (filteredItems && !filteredItems.length) {
       noDishFoundElement.hidden = false;
     } else {
       noDishFoundElement.hidden = true;
@@ -342,14 +439,13 @@ const filterFoodItems = () => {
   }
 }
 
-searchIconElement.addEventListener('click', () => {
-  const searchQuery = searchInputElement.value;
-  // Only search if there's some value in the text box
-  if (searchQuery && searchQuery.length) {
-    filterFoodItems();
-  }
-});
-
+/**
+ * Function to trim down input search value
+ * to prevent prefixed and suffixed spaces
+ * Accordingly, ecide whether to show remove icon or not
+ * Also on pressing enter, the filter method is invoked
+ * @param {KeyboardEvent} event 
+ */
 const searchInputFunction = (event) => {
   let query = event.target.value;
   query = query ? query.trim() : null;
@@ -365,7 +461,34 @@ const searchInputFunction = (event) => {
   }
 }
 
-// Clicking incremement button should keep decreasing item count
+// Debounced function created by using debounce from core.js ad custom callback declared above
+const debouncedFunction = debounce(searchInputFunction, SEARCH_DEBOUNCE_DELAY);
+
+
+
+// ----------------------EVENT LISTENERS----------------------------//
+
+// Search input text box event listener for keyup events
+searchInputElement.addEventListener('keyup', debouncedFunction);
+
+// Search icon event listener
+searchIconElement.addEventListener('click', () => {
+  const searchQuery = searchInputElement.value;
+  // Only search if there's some value in the text box
+  if (searchQuery && searchQuery.length) {
+    filterFoodItems();
+  }
+});
+
+// Remove search text icon event listner
+removeIconElement.addEventListener('click', () => {
+  searchInputElement.value = null;
+  removeIconElement.hidden = true;
+  filterFoodItems();
+});
+
+// 2nd page decrement count button
+// Clicking decrement button should keep decreasing item count
 // If it reaches 1, then hide this containe and show reorder button
 pageViewFoodCartCountDecrementElement.addEventListener('click', () => {
   decreaseFoodItemCount(
@@ -377,6 +500,7 @@ pageViewFoodCartCountDecrementElement.addEventListener('click', () => {
   recheckBaseSelectedFoodItemCount();
 });
 
+// 2nd page increment count button
 // Clicking incremement button should keep increasing item count
 pageViewFoodCartCountIncrementElement.addEventListener('click', () => {
   incrementFoodItemCount(
@@ -384,7 +508,9 @@ pageViewFoodCartCountIncrementElement.addEventListener('click', () => {
     document.getElementById('selected-food-count')
   );
   recheckBaseSelectedFoodItemCount();
-})
+});
+
+// 2nd page add to cart / reorder button
 // Clicking reorder button should hide the Reorder button
 // and start the increment counter
 pageViewFoodCartBtnElement.addEventListener('click', () => {
@@ -396,19 +522,12 @@ pageViewFoodCartBtnElement.addEventListener('click', () => {
   recheckBaseSelectedFoodItemCount();
 });
 
-removeIconElement.addEventListener('click', () => {
-  searchInputElement.value = null;
-  removeIconElement.hidden = true;
-  filterFoodItems();
-});
-
-const debouncedFunction = debounce(searchInputFunction, SEARCH_DEBOUNCE_DELAY);
-searchInputElement.addEventListener('keyup', debouncedFunction);
-
+// Event listener for navigating back to 1st page
 navigateElement.addEventListener('click', () => {
   mainContainerTempalte.hidden = false;
   foodPageContainerElement.classList.add('hidden');
   navigateElement.classList.add('hidden');
 })
 
+// Init function, fetch all data
 getData();
