@@ -451,6 +451,14 @@ header.banner {
     }
   }
 }
+.categories-loader-item {
+  height: 50px;
+  min-width: 140px;
+  @include ripple();
+  &:not(:last-of-type) {
+    margin-right: 1em;
+  }
+}
 
 
 @keyframes placeHolderShimmer {

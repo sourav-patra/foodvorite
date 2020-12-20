@@ -384,6 +384,20 @@ header.banner {
         animation-timing-function: linear;
         content: " "; }
 
+.categories-loader-item {
+  height: 50px;
+  min-width: 140px;
+  background: linear-gradient(to right, #dee1e6 8%, #b8bdc8 50%, #dee1e6 92%);
+  background-size: 100rem 64rem;
+  animation-duration: 1.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  content: " "; }
+  .categories-loader-item:not(:last-of-type) {
+    margin-right: 1em; }
+
 @keyframes placeHolderShimmer {
   0% {
     background-position: -46.8rem 0; }

@@ -35,6 +35,7 @@ const pageViewFoodCartCountIncrementElement = document.getElementById('selected-
 const noDishFoundElement = document.getElementById('no-dish');
 const favoritesLoadingElement = document.getElementById('favorites-loader');
 const foodItemsLoadingElement = document.getElementById('food-items-loader');
+const categoriesLoadingElement = document.getElementById('categories-loader');
 
 
 // State management; resusable variables
@@ -174,12 +175,14 @@ const renderCategoryItem = (categoryItem, index) => {
 
 /**
  * Function render the DOM elements for all categories in the category list
+ * Remove the loader once done
  */
 const getCategories = () => {
   categories.forEach((categoryItem, index) => {
     const elementItem = renderCategoryItem(categoryItem, index);
     categoriesContainer.appendChild(elementItem);
   });
+  categoriesLoadingElement.style.display = "none";
 }
 
 /**
