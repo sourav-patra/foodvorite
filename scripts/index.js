@@ -1,13 +1,16 @@
-import { API_URL, debouncedFunction, SEARCH_DEBOUNCE_DELAY  } from '../scripts/core.js';
+import { API_URL, debouncedFunction, SEARCH_DEBOUNCE_DELAY, DEFAULT_SECONDARY_COLOR, ICON_HIGHLIGHT_COLOR  } from '../scripts/core.js';
 
 const favoritesContainer = document.getElementById('favorites-container');
-const favoriteItemTemplate = document.getElementById('favorites-template');
+const foodItemTemplate = document.getElementById('food-item-template');
 const bagCountElement = document.getElementById('bag-count');
+const countIconSVGElement = document.querySelector('.cart svg path');
 const searchInputElement = document.getElementById('search-text');
 const searchIconElement = document.getElementById('search');
 const removeIconElement = document.getElementById('remove');
 
-const categoriesElement = document.getElementById('categories');
+const categoriesContainer = document.getElementById('categories');
+
+const foodItemsContainer = document.getElementById('food-items-container');
 const navigateElement = document.getElementById('navigate-back');
 
 let categories = [];
@@ -15,6 +18,14 @@ let recipes = [];
 let favorites = [];
 let cartItemsCount = 0;
 let activeCategoryIndex = -1;
+
+/**
+ * interface for htmlTemplateConfig {
+ * itemClass: string
+ * itemImageClass: string
+ * itemFooterClass
+ * }
+ */
 
 /**
  * Get foodfavorites data
@@ -27,6 +38,7 @@ const getData = async () => {
     recipes = data.recipes || [];
     getFavorites();
     getCategories();
+    getFoodItems();
   } catch (error) {
     console.log(error);
   }
@@ -42,79 +54,36 @@ const setAttributesForGivenElement = (element, attributesObj) => {
   }
 }
 
-const renderFavoriteFoodItem = (favoriteItem) => {
-  // Main container item element
-  const element = favoriteItemTemplate.content.cloneNode(true);
-  const imageElement = element.querySelector('.item .item-pic img');
-  setAttributesForGivenElement(imageElement, {
-    src: 'https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    alt: favoriteItem.name,
-    title: favoriteItem.name,
-    loading: 'lazy'
-  });
-  const queryStringFooter = '.item .item-footer';
-  const spanName = element.querySelector(`${queryStringFooter} .details-name`);
-  spanName.textContent = favoriteItem.name;
-  const spanPrice = element.querySelector(`${queryStringFooter} .details-price`);
-  spanPrice.textContent = `₹${favoriteItem.price}`;
-
-  // Button - Reorder
-  const reorderBtn = element.querySelector(`${queryStringFooter} .reorder`);
-  reorderBtn.textContent = 'REORDER';
-
-  const updateItemContainer = element.querySelector(`${queryStringFooter} .update-item`);
-  const decrementBtn = element.querySelector(`${queryStringFooter} .update-item .decrement`);
-  const incrementBtn = element.querySelector(`${queryStringFooter} .update-item .increment`);
-  const foodItemCountElement = element.querySelector(`${queryStringFooter} .update-item .item-count`);
-
-  // Clicking incremement button should keep decreasing item count
-  // If it reaches 1, then hide this containe and show reorder button
-  decrementBtn.addEventListener('click', () => {
-    if (favoriteItem.itemCount === 1) {
-      favoriteItem.itemCount = 0;
-      updateItemContainer.classList.add('hidden');
-      reorderBtn.hidden = false;
-    } else {
-      favoriteItem.itemCount -= 1;
-      foodItemCountElement.textContent = favoriteItem.itemCount;
-    }
-    decrementGlobalCartCount();
-  });
-
-  // Clicking incremement button should keep increasing item count
-  incrementBtn.addEventListener('click', () => {
-    favoriteItem.itemCount += 1;
-    foodItemCountElement.textContent = favoriteItem.itemCount;
-    incrementGlobalCartCount();
-  })
-  // Clicking reorder button should hide the Reorder button
-  // and start the increment counter
-  reorderBtn.addEventListener('click', () => {
-    if (favoriteItem.itemCount == null) {
-      favoriteItem.itemCount = 0;
-    }
-    favoriteItem.itemCount += 1;
-    reorderBtn.hidden = true;
-    updateItemContainer.classList.remove('hidden');
-    incrementGlobalCartCount();
-  });
-  return element.querySelector('.item');
-}
-
-function incrementGlobalCartCount() {
+const incrementGlobalCartCount = () => {
   cartItemsCount += 1;
+  updateBagCountElement();
 }
 
-function decrementGlobalCartCount() {
+const decrementGlobalCartCount = () => {
   if (cartItemsCount > 0) {
     cartItemsCount -= 1;
+  }
+  updateBagCountElement();
+}
+
+const updateBagCountElement = () => {
+  if (cartItemsCount) {
+    bagCountElement.textContent = cartItemsCount;
+    bagCountElement.hidden = false;
+    countIconSVGElement.setAttribute('fill', ICON_HIGHLIGHT_COLOR);
+    // render highlighted state;
+  } else {
+    bagCountElement.textContent = 0;
+    bagCountElement.hidden = true;
+    countIconSVGElement.setAttribute('fill', DEFAULT_SECONDARY_COLOR);
+    // render default state
   }
 }
 
 const getFavorites = () => {
   favorites = recipes.filter(recipe => recipe.isFavourite);
   favorites.forEach(favoriteItem => {
-    const elementItem = renderFavoriteFoodItem(favoriteItem);
+    const elementItem = renderFoodItem(favoriteItem, 'reorder');
     favoritesContainer.appendChild(elementItem);
   });
 }
@@ -155,13 +124,14 @@ const renderCategoryItem = (categoryItem, index) => {
     } else {
       // if some other category was active
       // then deselect it
-      const previouslyActiveCategoryElement = categoriesElement.children[activeCategoryIndex];
+      const previouslyActiveCategoryElement = categoriesContainer.children[activeCategoryIndex];
       previouslyActiveCategoryElement.classList.remove('active');
       // and set this one as active
       activeCategoryIndex = index;
       elementItem.classList.add('active');
     }
     // redraw items after this
+    renderFilteredItemsBasedOnCategory();
   })
   return elementItem;
 }
@@ -169,28 +139,117 @@ const renderCategoryItem = (categoryItem, index) => {
 const getCategories = () => {
   categories.forEach((categoryItem, index) => {
     const elementItem = renderCategoryItem(categoryItem, index);
-    categoriesElement.appendChild(elementItem);
+    categoriesContainer.appendChild(elementItem);
   });
 }
 
+const renderFoodItem = (foodItem, btnName) => {
+  // Main container item element
+  const element = foodItemTemplate.content.cloneNode(true);
+  const imageElement = element.querySelector('.item .image img');
+  setAttributesForGivenElement(imageElement, {
+    src: 'https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+    alt: foodItem.name,
+    title: foodItem.name,
+    loading: 'lazy'
+  });
+  const queryStringFooter = '.item .description';
+  const spanName = element.querySelector(`${queryStringFooter} .details-name`);
+  spanName.textContent = foodItem.name;
+  const spanPrice = element.querySelector(`${queryStringFooter} .details-price`);
+  spanPrice.textContent = `₹${foodItem.price}`;
 
-const clearItemsContainer = () => {
+  // Button - Reorder / Add to Bag
+  const addToCartElement = element.querySelector(`${queryStringFooter} .add-cart`);
+  addToCartElement.textContent = btnName;
 
+  const updateItemContainer = element.querySelector(`${queryStringFooter} .update-item`);
+  const decrementBtn = element.querySelector(`${queryStringFooter} .update-item .decrement`);
+  const incrementBtn = element.querySelector(`${queryStringFooter} .update-item .increment`);
+  const foodItemCountElement = element.querySelector(`${queryStringFooter} .update-item .item-count`);
+
+  // Check if already added to bag
+  if (foodItem.itemCount && foodItem.itemCount > 0) {
+    addToCartElement.hidden = true;
+    updateItemContainer.classList.remove('hidden');
+    foodItemCountElement.textContent = foodItem.itemCount;
+  }
+
+  // Clicking incremement button should keep decreasing item count
+  // If it reaches 1, then hide this containe and show reorder button
+  decrementBtn.addEventListener('click', () => {
+    if (foodItem.itemCount === 1) {
+      foodItem.itemCount = 0;
+      updateItemContainer.classList.add('hidden');
+      addToCartElement.hidden = false;
+    } else {
+      foodItem.itemCount -= 1;
+      foodItemCountElement.textContent = foodItem.itemCount;
+    }
+    decrementGlobalCartCount();
+  });
+
+  // Clicking incremement button should keep increasing item count
+  incrementBtn.addEventListener('click', () => {
+    foodItem.itemCount += 1;
+    foodItemCountElement.textContent = foodItem.itemCount;
+    incrementGlobalCartCount();
+  })
+  // Clicking reorder button should hide the Reorder button
+  // and start the increment counter
+  addToCartElement.addEventListener('click', () => {
+    if (foodItem.itemCount == null) {
+      foodItem.itemCount = 0;
+    }
+    foodItem.itemCount += 1;
+    addToCartElement .hidden = true;
+    updateItemContainer.classList.remove('hidden');
+    incrementGlobalCartCount();
+  });
+  return element.querySelector('.item');
+}
+
+const clearCurrentFoodItemsDOM = () => {
+  const foodItemElements = foodItemsContainer.children;
+  for (let i = foodItemElements.length - 1; i >= 0; i--) {
+    foodItemsContainer.removeChild(foodItemElements[i]);
+  }
+}
+
+const renderFilteredItemsBasedOnCategory = () => {
+  const selectedCategory = categories[activeCategoryIndex];
+  let filteredItems;
+  if (selectedCategory) {
+    filteredItems = recipes.filter(recipe => recipe.category === selectedCategory.name);
+  }
+  getFoodItems(filteredItems);
+}
+
+const getFoodItems = (filteredArray) => {
+  if (foodItemsContainer.children.length) {
+    clearCurrentFoodItemsDOM();
+  }
+  const itemsArray = filteredArray || recipes;
+  itemsArray.forEach(foodItem => {
+    const element = renderFoodItem(foodItem, 'add to bag');
+    foodItemsContainer.appendChild(element);
+  })
 }
 
 const searchQueryFunction = (event, textFromClick) => {
-  let query = textFromClick || (event ? event.target.value: null);
-  query = query.trim();
-  if (query.length) {
-    removeIconElement.hidden = false;
-    // Clear DOM nodes
-    clearItemsContainer();
-    const filteredItems = recipes.filter(recipe => recipe.name.includes(query));
-    // render filteredItems
-    console.log(filteredItems);
-  } else {
-    removeIconElement.hidden = true;
-    // render all items
+  try {
+    let query = textFromClick || (event ? event.target.value: null);
+    query = query.trim().toLowerCase();
+    let filteredItems;
+    if (query.length) {
+      removeIconElement.hidden = false;
+      filteredItems = recipes.filter(recipe => recipe.name.toLowerCase().includes(query));
+    } else {
+      removeIconElement.hidden = true;
+    }
+    getFoodItems(filteredItems);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -203,8 +262,8 @@ searchIconElement.addEventListener('click', () => {
 
 removeIconElement.addEventListener('click', () => {
   searchInputElement.value = null;
-  // render all items
   removeIconElement.hidden = true;
+  getFoodItems();
 });
 
 const debouncedSearch = debouncedFunction(searchQueryFunction, SEARCH_DEBOUNCE_DELAY);

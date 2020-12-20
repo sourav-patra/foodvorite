@@ -35,7 +35,7 @@
         </div>
         <!-- Cart  -->
         <div class="cart">
-          <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+          <svg style="width:38px;height:38px" viewBox="0 0 24 24">
             <path fill="#ababab" d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
           </svg>
           <span id="bag-count" hidden></span>
@@ -77,129 +77,24 @@
       <section class="categories" id="categories">
       </section>
       <!-- Main food items container -->
-      <section class="food-items-container">
-        <div class="food-item">
-          <figure class="food-item-pic">
-            <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-          </figure>
-          <section class="food-item-footer">
-            <div class="details">
-              <span class="details-name">Iced Christmas-pudding mousse</span>
-              <span class="details-price">10</span>
-            </div>
-            <button class="add-cart" hidden>ADD TO BAG</button>
-            <div class="update-item">
-              <div class="decrement">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H5V11H19V13Z" />
-                </svg>
-              </div>
-              <span class="item-count">1</span>
-              <div class="increment">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                </svg>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="food-item">
-          <figure class="food-item-pic">
-            <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-          </figure>
-          <section class="food-item-footer">
-            <div class="details">
-              <span class="details-name">Iced Christmas-pudding mousse</span>
-              <span class="details-price">10</span>
-            </div>
-            <button class="add-cart">ADD TO BAG</button>
-            <div class="update-item hidden">
-              <div class="decrement">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H5V11H19V13Z" />
-                </svg>
-              </div>
-              <span class="item-count">1</span>
-              <div class="increment">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                </svg>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="food-item">
-          <figure class="food-item-pic">
-            <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-          </figure>
-          <section class="food-item-footer">
-            <div class="details">
-              <span class="details-name">Iced Christmas-pudding mousse</span>
-              <span class="details-price">10</span>
-            </div>
-            <button class="add-cart">ADD TO BAG</button>
-            <div class="update-item hidden">
-              <div class="decrement">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H5V11H19V13Z" />
-                </svg>
-              </div>
-              <span class="item-count">1</span>
-              <div class="increment">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-                  <path fill="#fff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                </svg>
-              </div>
-            </div>
-          </section>
-        </div>
+      <section class="food-items-container" id="food-items-container">
       </section>
 
     </section>
   </main>
 
-  <!-- Template for favorite food item -->
-  <template id="favorites-template">
+  <!-- Template for food item -->
+  <template id="food-item-template">
     <div class="item">
-      <figure class="item-pic">
+      <figure class="image">
         <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
       </figure>
-      <section class="item-footer">
+      <section class="description">
         <div class="details">
           <span class="details-name"></span>
           <span class="details-price"></span>
         </div>
-        <button class="reorder"></button>
-        <div class="update-item hidden">
-          <div class="decrement">
-            <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-              <path fill="#fff" d="M19,13H5V11H19V13Z" />
-            </svg>
-          </div>
-          <span class="item-count">1</span>
-          <div class="increment">
-            <svg style="width:16px;height:16px" viewBox="0 0 24 24">
-              <path fill="#fff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-            </svg>
-          </div>
-        </div>
-      </section>
-    </div>
-  </template>
-  <!-- Template for main food item -->
-  <template id="food-item-template">
-    <div class="food-item">
-      <figure class="food-item-pic">
-        <img src="https://images.unsplash.com/photo-1533621426782-ffea2d5a502e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8YnJlYWtmYXN0JTIwcGxhdHRlcnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
-      </figure>
-      <section class="food-item-footer">
-        <div class="details">
-          <span class="details-name">Iced Christmas-pudding mousse</span>
-          <span class="details-price">10</span>
-        </div>
-        <button class="add-cart">ADD TO BAG</button>
+        <button class="add-cart"></button>
         <div class="update-item hidden">
           <div class="decrement">
             <svg style="width:16px;height:16px" viewBox="0 0 24 24">

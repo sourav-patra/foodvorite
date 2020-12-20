@@ -64,11 +64,10 @@ header.banner {
         justify-content: center;
         position: relative; }
         .container .favorites-header .cart #bag-count {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
           top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%); }
+          transform: translateY(-6px); }
     .container .favorites-container {
       padding: 1em 0em;
       display: flex;
@@ -76,27 +75,27 @@ header.banner {
       border-bottom: 1px solid #ababab; }
       .container .favorites-container .item:not(:last-of-type) {
         margin-right: 1em; }
-      .container .favorites-container .item-pic {
+      .container .favorites-container .item .image {
         margin: 0;
         cursor: pointer; }
-        .container .favorites-container .item-pic img {
+        .container .favorites-container .item .image img {
           max-width: 300px; }
-      .container .favorites-container .item-footer {
+      .container .favorites-container .item .description {
         padding-top: 0.5em;
         display: flex;
         justify-content: space-between; }
-        .container .favorites-container .item-footer .details {
+        .container .favorites-container .item .description .details {
           display: flex;
           flex-direction: column;
           max-width: 200px;
           overflow-wrap: break-word;
           font-weight: 500; }
-          .container .favorites-container .item-footer .details-name {
+          .container .favorites-container .item .description .details-name {
             font-size: 14px; }
-          .container .favorites-container .item-footer .details-price {
+          .container .favorites-container .item .description .details-price {
             font-size: 1em;
             line-height: 1.5em; }
-        .container .favorites-container .item-footer .reorder {
+        .container .favorites-container .item .description .add-cart {
           border: none;
           max-height: 30px;
           outline: none;
@@ -106,11 +105,12 @@ header.banner {
           background: #41c379;
           color: #fff;
           font-size: 12px;
+          text-transform: uppercase;
           cursor: pointer; }
-          .container .favorites-container .item-footer .reorder:hover {
+          .container .favorites-container .item .description .add-cart:hover {
             filter: brightness(110%);
             transition: filter 0.2s ease; }
-        .container .favorites-container .item-footer .update-item {
+        .container .favorites-container .item .description .update-item {
           border-radius: 5px;
           min-width: 100px;
           text-align: center;
@@ -122,12 +122,12 @@ header.banner {
           display: flex;
           align-items: center;
           justify-content: space-between; }
-          .container .favorites-container .item-footer .update-item .decrement, .container .favorites-container .item-footer .update-item .increment {
+          .container .favorites-container .item .description .update-item .decrement, .container .favorites-container .item .description .update-item .increment {
             cursor: pointer;
             display: flex; }
-          .container .favorites-container .item-footer .update-item .item-count {
+          .container .favorites-container .item .description .update-item .item-count {
             font-size: 12px; }
-          .container .favorites-container .item-footer .update-item.hidden {
+          .container .favorites-container .item .description .update-item.hidden {
             display: none; }
   .container .search-container {
     padding: 1em 0;
@@ -206,33 +206,33 @@ header.banner {
     display: flex;
     flex-wrap: wrap;
     padding: 1em 0; }
-    .container .recipes-container .food-items-container .food-item {
+    .container .recipes-container .food-items-container .item {
       width: calc(25% - 1em);
       background: #fff;
       border-radius: 5px;
       margin: 0 1em 1em 0;
       box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2); }
-      .container .recipes-container .food-items-container .food-item-pic {
+      .container .recipes-container .food-items-container .item .image {
         margin: 0;
         cursor: pointer; }
-        .container .recipes-container .food-items-container .food-item-pic img {
+        .container .recipes-container .food-items-container .item .image img {
           width: 100%; }
-      .container .recipes-container .food-items-container .food-item-footer {
+      .container .recipes-container .food-items-container .item .description {
         padding: 0.5em 1em;
         display: flex;
         align-items: center;
         justify-content: space-between; }
-        .container .recipes-container .food-items-container .food-item-footer .details {
+        .container .recipes-container .food-items-container .item .description .details {
           display: flex;
           flex-direction: column;
           padding-right: 5px;
           font-weight: 500; }
-          .container .recipes-container .food-items-container .food-item-footer .details-name {
+          .container .recipes-container .food-items-container .item .description .details-name {
             font-size: 14px; }
-          .container .recipes-container .food-items-container .food-item-footer .details-price {
+          .container .recipes-container .food-items-container .item .description .details-price {
             font-size: 1em;
             padding-top: 5px; }
-        .container .recipes-container .food-items-container .food-item-footer .add-cart {
+        .container .recipes-container .food-items-container .item .description .add-cart {
           border: none;
           height: 30px;
           outline: none;
@@ -242,11 +242,12 @@ header.banner {
           background: #41c379;
           color: #fff;
           font-size: 12px;
+          text-transform: uppercase;
           cursor: pointer; }
-          .container .recipes-container .food-items-container .food-item-footer .add-cart:hover {
+          .container .recipes-container .food-items-container .item .description .add-cart:hover {
             filter: brightness(110%);
             transition: filter 0.2s ease; }
-        .container .recipes-container .food-items-container .food-item-footer .update-item {
+        .container .recipes-container .food-items-container .item .description .update-item {
           border-radius: 5px;
           min-width: 100px;
           text-align: center;
@@ -258,27 +259,27 @@ header.banner {
           display: flex;
           align-items: center;
           justify-content: space-between; }
-          .container .recipes-container .food-items-container .food-item-footer .update-item .decrement, .container .recipes-container .food-items-container .food-item-footer .update-item .increment {
+          .container .recipes-container .food-items-container .item .description .update-item .decrement, .container .recipes-container .food-items-container .item .description .update-item .increment {
             cursor: pointer;
             display: flex; }
-          .container .recipes-container .food-items-container .food-item-footer .update-item .item-count {
+          .container .recipes-container .food-items-container .item .description .update-item .item-count {
             font-size: 12px; }
-          .container .recipes-container .food-items-container .food-item-footer .update-item.hidden {
+          .container .recipes-container .food-items-container .item .description .update-item.hidden {
             display: none; }
 
 @media screen and (max-width: 1366px) {
-  .container .recipes-container .food-items-container .food-item {
+  .container .recipes-container .food-items-container .item {
     width: calc(33.33% - 1em); } }
 
 @media screen and (max-width: 1024px) {
-  .container .recipes-container .food-items-container .food-item {
+  .container .recipes-container .food-items-container .item {
     width: calc(50% - 1em); } }
 
 @media screen and (max-width: 650px) {
-  .container .recipes-container .food-items-container .food-item {
+  .container .recipes-container .food-items-container .item {
     width: 100%;
     margin: 0 0 1em 0; }
-    .container .recipes-container .food-items-container .food-item:last-of-type {
+    .container .recipes-container .food-items-container .item:last-of-type {
       margin: 0; } }
 
 ::-webkit-scrollbar {
