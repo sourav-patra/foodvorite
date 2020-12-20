@@ -4,7 +4,7 @@
  * @param {function} callback Given callback function
  * @param {number} delay Delay in milliseconds
  */
-export function debouncedFunction (callback, delay) {
+export function debounce (callback, delay) {
   let timeOut;
   return function() {
     let context = this, args = arguments;
@@ -16,7 +16,7 @@ export function debouncedFunction (callback, delay) {
 }
 
 export const API_URL = "http://temp.dash.zeta.in/food.php";
-export const SEARCH_DEBOUNCE_DELAY = 300;
+export const SEARCH_DEBOUNCE_DELAY = 200;
 export const DEFAULT_SECONDARY_COLOR = "#ABABAB";
 export const ICON_HIGHLIGHT_COLOR = "#FAA92A";
 

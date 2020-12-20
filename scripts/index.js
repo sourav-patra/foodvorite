@@ -1,4 +1,4 @@
-import { API_URL, debouncedFunction, SEARCH_DEBOUNCE_DELAY, DEFAULT_SECONDARY_COLOR, ICON_HIGHLIGHT_COLOR  } from '../scripts/core.js';
+import { API_URL, debounce, SEARCH_DEBOUNCE_DELAY, DEFAULT_SECONDARY_COLOR, ICON_HIGHLIGHT_COLOR  } from '../scripts/core.js';
 
 const favoritesContainer = document.getElementById('favorites-container');
 const foodItemTemplate = document.getElementById('food-item-template');
@@ -131,7 +131,7 @@ const renderCategoryItem = (categoryItem, index) => {
       elementItem.classList.add('active');
     }
     // redraw items after this
-    renderFilteredItemsBasedOnCategory();
+    filterFoodItems();
   })
   return elementItem;
 }
@@ -216,15 +216,6 @@ const clearCurrentFoodItemsDOM = () => {
   }
 }
 
-const renderFilteredItemsBasedOnCategory = () => {
-  const selectedCategory = categories[activeCategoryIndex];
-  let filteredItems;
-  if (selectedCategory) {
-    filteredItems = recipes.filter(recipe => recipe.category === selectedCategory.name);
-  }
-  getFoodItems(filteredItems);
-}
-
 const getFoodItems = (filteredArray) => {
   if (foodItemsContainer.children.length) {
     clearCurrentFoodItemsDOM();
@@ -236,16 +227,21 @@ const getFoodItems = (filteredArray) => {
   })
 }
 
-const searchQueryFunction = (event, textFromClick) => {
+/**
+ * Globla filter function applicable when either
+ * 1. search input is provided
+ * 2. a category is chosen or removed
+ */
+const filterFoodItems = () => {
   try {
-    let query = textFromClick || (event ? event.target.value: null);
-    query = query.trim().toLowerCase();
+    const searchQuery = searchInputElement.value;
     let filteredItems;
-    if (query.length) {
-      removeIconElement.hidden = false;
-      filteredItems = recipes.filter(recipe => recipe.name.toLowerCase().includes(query));
-    } else {
-      removeIconElement.hidden = true;
+    if (searchQuery && searchQuery.length) {
+      filteredItems = recipes.filter(recipe => recipe.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+    if (activeCategoryIndex > -1) {
+      const newFilteredItems = filteredItems || recipes;
+      filteredItems = newFilteredItems.filter(recipe => recipe.category === categories[activeCategoryIndex].name);
     }
     getFoodItems(filteredItems);
   } catch (error) {
@@ -255,18 +251,34 @@ const searchQueryFunction = (event, textFromClick) => {
 
 searchIconElement.addEventListener('click', () => {
   const searchQuery = searchInputElement.value;
+  // Only search if there's some value in the text box
   if (searchQuery && searchQuery.length) {
-    searchQueryFunction(null, searchQuery);
+    filterFoodItems();
   }
 });
+
+const searchInputFunction = (event) => {
+  let query = event.target.value;
+  query = query ? query.trim() : null;
+  if (query) {
+    removeIconElement.hidden = false;
+  } else {
+    removeIconElement.hidden = true;
+  }
+  searchInputElement.value = query;
+  // if Enter key is pressed
+  if (event.keyCode === 13) {
+    filterFoodItems();
+  }
+}
 
 removeIconElement.addEventListener('click', () => {
   searchInputElement.value = null;
   removeIconElement.hidden = true;
-  getFoodItems();
+  filterFoodItems();
 });
 
-const debouncedSearch = debouncedFunction(searchQueryFunction, SEARCH_DEBOUNCE_DELAY);
-searchInputElement.addEventListener('input', debouncedSearch)
+const debouncedFunction = debounce(searchInputFunction, SEARCH_DEBOUNCE_DELAY);
+searchInputElement.addEventListener('keyup', debouncedFunction);
 
 getData();

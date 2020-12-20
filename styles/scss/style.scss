@@ -232,6 +232,9 @@ header.banner {
     .categories {
       display: flex;
       padding: 1em 0;
+      position: sticky;
+      background: whitesmoke;
+      top: calc(0px - 1em);
       overflow-x: auto;
       &-item {
         background: #fff;
