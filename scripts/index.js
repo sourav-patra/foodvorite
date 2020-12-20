@@ -163,7 +163,7 @@ const setFoodPageDetails = () => {
   const pageViewFoodNameEl = document.getElementById('selected-food-name');
   const pageViewFoodPriceEl = document.getElementById('selected-food-price');
   const pageViewFoodCountContainerEl = document.getElementById('selected-food-update-item');
-  const pageViewFoodCountCountEl = document.getElementById('selected-food-count');
+  const pageViewFoodCountEl = document.getElementById('selected-food-count');
   const pageViewFoodCategoryEl = document.getElementById('selected-food-category');
   const pageViewFoodRatingsEl = document.getElementById('selected-food-ratings');
   const pageViewFoodDetailsEl = document.getElementById('selected-food-details');
@@ -178,17 +178,18 @@ const setFoodPageDetails = () => {
   
   // If item count for the selected food is 0 or undefined, then show the 
   // usual button
-  if (!selectedFoodItem.itemCount) {
-    pageViewFoodCartBtnElement.hidden = false;
-    if (!pageViewFoodCountContainerEl.classList.contains('hidden')) {
-      pageViewFoodCountContainerEl.classList.add('hidden');
-    }
-  } else {
+  if (selectedFoodItem.itemCount && selectedFoodItem.itemCount > 0) {
     pageViewFoodCartBtnElement.hidden = true;
     if (pageViewFoodCountContainerEl.classList.contains('hidden')) {
       pageViewFoodCountContainerEl.classList.remove('hidden');
     }
-    pageViewFoodCountCountEl.textContent = selectedFoodItem.itemCount;
+    pageViewFoodCountEl.textContent = selectedFoodItem.itemCount;
+  } else {
+    pageViewFoodCartBtnElement.hidden = false;
+    if (!pageViewFoodCountContainerEl.classList.contains('hidden')) {
+      pageViewFoodCountContainerEl.classList.add('hidden');
+    }
+    pageViewFoodCountEl.textContent = 1;
   }
 
 }

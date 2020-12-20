@@ -73,6 +73,7 @@ header.banner {
         position: relative; }
         .container .favorites-header .cart #bag-count {
           font-size: 14px;
+          font-weight: 500;
           position: absolute;
           top: 50%;
           transform: translateY(-6px); }
