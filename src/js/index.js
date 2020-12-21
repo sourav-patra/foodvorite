@@ -11,7 +11,7 @@ import {
   Category,
   Recipe
 } from './core.js';
-
+import "../styles/scss/style.scss";
 const mainContainerTempalte = document.getElementById('main-container');
 
 const favoritesContainer = document.getElementById('favorites-container');
