@@ -10,7 +10,7 @@ import {
   SAMPLE_IMAGE_APIS,
   Category,
   Recipe
-} from '../scripts/core.js';
+} from './core.js';
 
 const mainContainerTempalte = document.getElementById('main-container');
 
