@@ -8,8 +8,9 @@
     "sass-compile": "node-sass src/styles/scss -o src/styles/css",
     "sass-watch": "node-sass -w src/styles/scss -o src/styles/css",
     "live": "live-server",
+    "serve:live": "run-p sass-watch live",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --config webpack.dev.js",
+    "serve:webpack": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
   "repository": {

@@ -11,6 +11,7 @@ import {
   Category,
   Recipe
 } from './core.js';
+// Comment this line to run in live server mode
 import "../styles/scss/style.scss";
 const mainContainerTempalte = document.getElementById('main-container');
 

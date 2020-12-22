@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Foodvorite</title>
+  <link rel="icon" href="./src/assets/favicon.png" type="image/png">
   <link rel="stylesheet preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap">
-  <body>
+  <link rel="stylesheet" href="./src/styles/css/style.css">
+<body>
   <!-- Banner -->
   <header class="banner">
     <!-- Navigate Back button -->
@@ -182,7 +184,7 @@
   <template id="food-item-template">
     <div class="item">
       <figure class="image">
-        <img alt="image"/>
+        <img src="" alt="image"/>
       </figure>
       <section class="description">
         <div class="details">
@@ -214,7 +216,7 @@
     <section class="food-page-container">
       <!-- Selected food item image -->
       <figure class="food-image-container">
-        <img alt="Favorite food image" id="selected-food-image"/>
+        <img src="" alt="" id="selected-food-image"/>
       </figure>
       <!-- Selected food item name, price and item count in the bag -->
       <section class="food-description-container">
@@ -258,5 +260,7 @@
       </section>
     </section>
   </main>
-  </body>
+  
+  <script type="module" src="./src/js/index.js"></script>
+</body>
 </html>
