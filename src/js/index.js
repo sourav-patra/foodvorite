@@ -161,7 +161,7 @@ const renderCategoryItem = (categoryItem, index) => {
     } else {
       // if some other category was active
       // then deselect it
-      const previouslyActiveCategoryElement = categoriesContainer.children[activeCategoryIndex];
+      const previouslyActiveCategoryElement = categoriesContainer.children[1 + activeCategoryIndex];
       previouslyActiveCategoryElement.classList.remove('active');
       // and set this one as active
       activeCategoryIndex = index;
